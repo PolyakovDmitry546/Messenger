@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 class Channel(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='channels')
-    members = models.ManyToManyField(User, through=Membership)
+    members = models.ManyToManyField(User, through='Membership')
     name = models.CharField(max_length=100, unique=True)
     title = models.CharField(max_length=1000)
     icon = models.ImageField(upload_to='icons/')
