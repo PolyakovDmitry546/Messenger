@@ -11,4 +11,14 @@
         <a href="{% url 'register' %}">Register</a>
     {% endif %}
 
-{% endblock %}
+    <div>
+        <div style="float: left; width: 20%;">
+            {% include 'includes/channels_panel.html' %}
+        </div>
+        <div style="float: left; width: 80%;">
+            {% block channel_content %}
+            {% endblock channel_content %}
+        </div>
+    </div>
+
+{% endblock content %}

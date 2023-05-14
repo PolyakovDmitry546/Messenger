@@ -1,0 +1,18 @@
+{% extends 'home.html' %}
+
+{% block channel_content %}
+    <div>
+        <div data-setbg="{{ context.channel.icon.url }}"></div>
+        <a href="">{{ context.channel.name }}</a>
+        <p>count subscribers</p>
+    </div>
+    <hr>
+    <div>
+        {% for message in context.channel.get_messages %}
+            <a>{{ message.author.username }}</a>
+            <p>{{ message.text }}</p>
+            <p>{{ message.update_at }}</p>
+        {% endfor %}
+    </div>
+
+{% endblock channel_content %}

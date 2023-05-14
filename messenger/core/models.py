@@ -16,6 +16,9 @@ class Channel(models.Model):
     
     def get_absolute_url(self):
         return reverse('channel', kwargs={'pk': self.pk})
+    
+    def get_messages(self):
+        return self.messages.all()
 
 
 class Membership(models.Model):

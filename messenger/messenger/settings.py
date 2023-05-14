@@ -126,8 +126,9 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+LOGIN_URL = '/user/login/'
 LOGIN_REDIRECT_URL = '/home/'
-LOGOUT_REDIRECT_URL = '/home/'
+LOGOUT_REDIRECT_URL = '/user/login/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 

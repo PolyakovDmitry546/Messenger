@@ -1,0 +1,10 @@
+<h1>Channels</h1>
+<input title="Search">
+<hr>
+{% for channel in context.user_channels %}
+    <a href="{{ channel.get_absolute_url }}">{{ channel.name }}</a><br>
+{% empty %}
+    <p>No channels yet.</p>
+{% endfor %}
+<hr>
+<button>Create new channel</button>
