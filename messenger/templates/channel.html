@@ -7,12 +7,20 @@
         <p>count subscribers</p>
     </div>
     <hr>
-    <div>
+    <div id="chat-log">
         {% for message in context.channel.get_messages %}
-            <a>{{ message.author.username }}</a>
-            <p>{{ message.text }}</p>
-            <p>{{ message.update_at }}</p>
+            <div>
+                <a>{{ message.author.username }}</a>
+                <p>{{ message.text }}</p>
+                <p>{{ message.update_at }}</p>
+            </div>
         {% endfor %}
     </div>
+
+    <input id="chat-message-input" type="text" size="80"><br>
+    <input id="chat-message-submit" type="button" value="Send">
+    {{ context.channel.pk|json_script:"room-name" }}
+    {{ user.pk|json_script:"user_pk" }}
+
 
 {% endblock channel_content %}
