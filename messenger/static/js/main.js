@@ -1,4 +1,7 @@
-const roomName = JSON.parse(document.getElementById('room-name').textContent);
+import {getMessageNode} from './components/message.js';
+
+const roomName = JSON.parse(document.getElementById('roomName').textContent);
+const userId = JSON.parse(document.getElementById('userId').textContent);
 
 const chatSocket = new WebSocket(
     'ws://'
@@ -11,10 +14,9 @@ const chatSocket = new WebSocket(
 chatSocket.onmessage = function(e) {
     const data = JSON.parse(e.data);        
     const message = JSON.parse(data.message);
+    const is_author_of_message = userId==message.userId;
 
-    var messageDiv = document.createElement('div');
-    messageDiv.innerHTML = `<a>${message.author_username}</a><p>${message.text}</p><p>${new Date(message.update_at).toString()}</p>`;
-    document.querySelector('#chat-log').append(messageDiv);
+    document.querySelector('#chat-log').append(getMessageNode(message, "group", is_author_of_message));
 };
 
 chatSocket.onclose = function(e) {

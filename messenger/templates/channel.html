@@ -1,26 +1,22 @@
 {% extends 'home.html' %}
+{% load static %}
 
 {% block channel_content %}
+    {{ context.channel.pk|json_script:"roomName" }}
+    {{ user.pk|json_script:"userId" }}
+    {{ context.messages_url|json_script:"messagesURL"}}
     <div>
         <div data-setbg="{{ context.channel.icon.url }}"></div>
         <a href="">{{ context.channel.name }}</a>
         <p>count subscribers</p>
     </div>
     <hr>
-    <div id="chat-log">
-        {% for message in context.channel.get_messages %}
-            <div>
-                <a>{{ message.author.username }}</a>
-                <p>{{ message.text }}</p>
-                <p>{{ message.update_at }}</p>
-            </div>
-        {% endfor %}
-    </div>
+    <div id="chat-log"></div>
+    <script type="module" src="{% static 'js/channel.js' %}"></script>
+    
 
     <input id="chat-message-input" type="text" size="80"><br>
     <input id="chat-message-submit" type="button" value="Send">
-    {{ context.channel.pk|json_script:"room-name" }}
-    {{ user.pk|json_script:"user_pk" }}
 
 
 {% endblock channel_content %}

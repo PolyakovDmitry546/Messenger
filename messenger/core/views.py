@@ -1,9 +1,10 @@
-from django.shortcuts import render, redirect
-from django.views.generic import ListView, DetailView
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.urls import reverse
 
-from .models import Channel
+from .models import Channel, Message
+from . import DTO
 
 
 @login_required()
@@ -24,10 +25,30 @@ def channel(request, **kwargs):
     context = {
         'context': {
             'channel': Channel.objects.get(pk=pk),
-            'user_channels': user.channel_set.all()
+            'user_channels': user.channel_set.all(),
+            'messages_url': reverse('messages', kwargs={'pk': pk})
         }
     }
     return render(request, template_name, context)
+
+
+@login_required()
+def get_messages(request, **kwargs):
+    pk = kwargs.get('pk')
+    messages = Channel.objects.get(pk=pk).get_messages()
+    data = []
+    mes: Message
+    for mes in messages:
+        data.append(
+            DTO.Message(
+                mes.author.pk,
+                mes.author.get_username(),
+                mes.text,
+                mes.update_at
+            )
+        )
+    data = DTO.MessageList(data)
+    return JsonResponse(data.to_json(), safe=False)
 
 
 def index(request):
