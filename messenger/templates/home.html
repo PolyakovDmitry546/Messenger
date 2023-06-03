@@ -1,24 +1,21 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
-<h1>Home page</h1>
-<hr>
-    {% if user.is_authenticated %}
-        <a href="{% url 'logout' %}">Logout</a>
-    {% else %}
-        <a href="{% url 'login' %}">Login</a> |
-        <a href="{% url 'register' %}">Register</a>
-    {% endif %}
-
-    <div>
-        <div style="float: left; width: 20%;">
-            {% include 'includes/channels_panel.html' %}
-        </div>
-        <div style="float: left; width: 80%;">
-            {% block channel_content %}
-            {% endblock channel_content %}
-        </div>
+<div>
+    <div style="float: left; width: 20%;">
+        <h1>Home page</h1>
+        <hr>
+        {% if user.is_authenticated %}
+            <a href="{% url 'logout' %}">Logout</a>
+        {% else %}
+            <a href="{% url 'login' %}">Login</a> |
+            <a href="{% url 'register' %}">Register</a>
+        {% endif %}
+        {% include 'includes/channels_panel.html' %}
     </div>
-
+    <div style="float: left; width: 80%;">
+        {% block channel_content %}
+        {% endblock channel_content %}
+    </div>
+</div>
 {% endblock content %}
