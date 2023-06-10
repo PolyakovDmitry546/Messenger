@@ -24,6 +24,7 @@ class Channel(models.Model):
 class Membership(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     channel = models.ForeignKey(Channel, on_delete=models.CASCADE)
+    last_read_message_pk = models.BigIntegerField()
 
     def __str__(self) -> str:
         return f"{self.user} -> {self.channel}"
