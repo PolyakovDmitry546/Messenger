@@ -28,6 +28,15 @@ class Membership(models.Model):
 
     def __str__(self) -> str:
         return f"{self.user} -> {self.channel}"
+    
+    def read_message_count(self):
+        return self.channel.messages.filter(pk__lte=self.last_read_message_pk).count()
+
+    def unread_message_count(self):
+        return self.channel.messages.filter(pk__gt=self.last_read_message_pk).count()
+
+    def get_number_page_with_last_read_message(self, per_page):
+        return self.read_message_count() // per_page
 
 
 class Message(models.Model):
