@@ -3,7 +3,9 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.urls import reverse
 
-from .models import Channel, Message
+from .models import Channel
+from .services import ChannelMessagesPageService
+from .serializers import MessagePageSerializer
 from . import DTO
 
 
@@ -34,21 +36,16 @@ def channel(request, **kwargs):
 
 @login_required()
 def get_messages(request, **kwargs):
-    pk = kwargs.get('pk')
-    messages = Channel.objects.get(pk=pk).get_messages()
-    data = []
-    mes: Message
-    for mes in messages:
-        data.append(
-            DTO.Message(
-                mes.author.pk,
-                mes.author.get_username(),
-                mes.text,
-                mes.update_at
-            )
-        )
-    data = DTO.MessageList(data)
-    return JsonResponse(data.to_json(), safe=False)
+    page = request.GET.get('page', default=None)
+    page = int(page) if page is not None else None
+    per_page = request.GET.get('per_page', default=None)
+    per_page = int(per_page) if per_page is not None else None
+    channel_pk = kwargs.get('pk')
+
+    channel_service = ChannelMessagesPageService(request.user, channel_pk, page, per_page)
+    obj = dict(messages=channel_service.get_messages(), page=channel_service.get_page(), next_page=channel_service.get_next_page())
+    serializer = MessagePageSerializer(obj)
+    return JsonResponse(serializer.data, safe=False)
 
 
 def index(request):
