@@ -7,7 +7,7 @@ export function getMessageNode(message, channel_type='group', is_author_of_messa
             <div class="card" style="max-width: 70%; min-width: 30%;">
                 <div class="card-body">
                     <h6 class="card-subtitle mb-2 text-body-secondary">
-                        <a href="">${message.author_username}</a>
+                        <a href="">${message.author.username}</a>
                     </h6>
                     <p class="card-text">${message.text}</p> 
                     <p class="card-text text-end">
