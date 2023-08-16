@@ -1,10 +1,52 @@
 import {getMessageNode} from './components/message.js';
 
 const chatLog = document.getElementById('chatLog');
+const roomName = JSON.parse(document.getElementById('roomName').textContent);
 const userId = JSON.parse(document.getElementById('userId').textContent);
 var nextTopPageNumber;
-var nextBottomPageNumber;
-var currentBottomPageNumber;
+var nextBottomPageNumber = 0;
+var currentBottomPageNumber = 0;
+
+
+const chatSocket = new WebSocket(
+    'ws://'
+    + window.location.host
+    + '/ws/chat/'
+    + roomName
+    + '/'
+);
+
+chatSocket.onmessage = function(e) {  
+    const message = JSON.parse(e.data);
+
+    if (nextBottomPageNumber === currentBottomPageNumber) {
+        const is_author_of_message = userId==message.author.id;
+        chatLog.append(getMessageNode(message, "group", is_author_of_message));
+        chatLog.scrollTop = chatLog.scrollHeight;
+    }
+};
+
+chatSocket.onclose = function(e) {
+    console.error('Chat socket closed unexpectedly');
+};
+
+document.querySelector('#chat-message-input').focus();
+document.querySelector('#chat-message-input').onkeyup = function(e) {
+    if (e.keyCode === 13) {  // enter, return
+        document.querySelector('#chat-message-submit').click();
+    }
+};
+
+document.querySelector('#chat-message-submit').onclick = function(e) {
+    const messageInputDom = document.querySelector('#chat-message-input');
+    const message = messageInputDom.value;
+    chatSocket.send(JSON.stringify({
+        'message': {
+            'text': message
+        }
+    }));
+    messageInputDom.value = '';
+};
 
 async function getMessages(page) {
     var url = JSON.parse(document.getElementById('messagesURL').textContent);
