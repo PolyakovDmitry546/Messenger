@@ -52,11 +52,13 @@ const throttle = (callback, time) => {
     }, time)
 }
 
+//limit of the distance to the end of the scroll bar, crossing which the following messages are displayed
+const scroollDownLimit = 250;
+
 const handleInfiniteScroll = () => {
     throttle(() => {
-        const endOfPage = window.innerHeight + window.pageYOffset >= document.body.offsetHeight;
-        if (endOfPage & nextBottomPageNumber !== currentBottomPageNumber) {
-            console.log(nextBottomPageNumber, currentBottomPageNumber);
+        const endOfPage = chatLog.scrollHeight - chatLog.scrollTop - chatLog.clientHeight <= scroollDownLimit;
+        if (endOfPage && nextBottomPageNumber !== currentBottomPageNumber) {
             addMessagesDown(nextBottomPageNumber);
         }
     }, 1000)
