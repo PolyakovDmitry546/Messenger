@@ -4,7 +4,7 @@ import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 
 from .models import Channel, Message
-from . import DTO
+from .serializers import MessageSerializer
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
@@ -31,16 +31,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
         message = Message(author=self.user, text=text_message, channel=self.channel)
         await message.asave()
 
-        message_dto = DTO.Message(
-            author_id=message.author.pk,
-            author_username=message.author.get_username(),
-            text=message.text,
-            update_at=message.update_at
-        )
+        serializer = MessageSerializer(message)
 
         # Send message to room group
         await self.channel_layer.group_send(
-            self.room_group_name, {"type": "chat_message", "message": message_dto.to_json()}
+            self.room_group_name, {"type": "chat_message", "message": serializer.data}
         )
 
     # Receive message from room group
@@ -48,4 +43,4 @@ class ChatConsumer(AsyncWebsocketConsumer):
         message = event["message"]
 
         # Send message to WebSocket
-        await self.send(text_data=json.dumps({"message": message}))
+        await self.send(text_data=json.dumps(message))

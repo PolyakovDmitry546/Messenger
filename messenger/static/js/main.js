@@ -11,12 +11,11 @@ const chatSocket = new WebSocket(
     + '/'
 );
 
-chatSocket.onmessage = function(e) {
-    const data = JSON.parse(e.data);        
-    const message = JSON.parse(data.message);
-    const is_author_of_message = userId==message.userId;
+chatSocket.onmessage = function(e) {  
+    const message = JSON.parse(e.data);
+    const is_author_of_message = userId==message.author.id;
 
-    document.querySelector('#chat-log').append(getMessageNode(message, "group", is_author_of_message));
+    document.querySelector('#chatLog').append(getMessageNode(message, "group", is_author_of_message));
 };
 
 chatSocket.onclose = function(e) {
