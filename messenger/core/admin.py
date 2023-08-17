@@ -11,6 +11,7 @@ class ChannelMembersInLine(admin.StackedInline):
 class ChannelMessageInLine(admin.StackedInline):
     model = models.Message
 
+
 @register(models.Channel)
 class ChannelAdmin(admin.ModelAdmin):
     inlines = [ChannelMembersInLine, ChannelMessageInLine]

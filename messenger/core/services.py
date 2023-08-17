@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.db.models import QuerySet
 
-from .models import Channel, Message, Membership
+from .models import Channel, Membership, Message
 
 
 class ChannelService:
@@ -9,19 +9,17 @@ class ChannelService:
         self.user = user
         self.channel = Channel.objects.get(pk=channel_pk)
 
-    
     def get_message_count(self) -> int:
         return self.channel.messages.count()
 
-
-    def get_messages(self, page: int = None, per_page: int = None) -> QuerySet[Message]: 
+    def get_messages(self, page: int = None, per_page: int = None) -> QuerySet[Message]:
         if page is None or per_page is None:
             return self.channel.messages.all()
 
         bottom = page * per_page
         top = (page + 1) * per_page
         return self.channel.messages.all()[bottom:top]
-    
+
 
 class ChannelMessagesPageService:
     def __init__(self, user: User, channel_pk: int, page: int | None, per_page: int | None) -> None:
@@ -35,7 +33,7 @@ class ChannelMessagesPageService:
 
     def get_page(self) -> int:
         return self._page
-    
+
     def get_next_page(self) -> int | None:
         if (self._page + 1) * self._per_page < self._channel_service.get_message_count():
             return self._page + 1

@@ -1,12 +1,12 @@
-from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, JsonResponse
+from django.shortcuts import redirect, render
 from django.urls import reverse
 
-from .models import Channel
-from .services import ChannelMessagesPageService
-from .serializers import MessagePageSerializer
 from .forms import ChannelCreationForm
+from .models import Channel
+from .serializers import MessagePageSerializer
+from .services import ChannelMessagesPageService
 
 
 @login_required()
@@ -14,7 +14,7 @@ def home(request):
     user = request.user
     template_name = 'home.html'
     context = {'context': {
-        'user_channels': user.channel_set.all()
+        'user_channels': user.channel_set.all(),
     }}
     return render(request, template_name, context)
 
@@ -23,9 +23,9 @@ def home(request):
 def channel_create(request: HttpRequest):
     template_name = 'channel_create.html'
 
-    if request.method == 'GET':    
+    if request.method == 'GET':
         context = {
-            'form': ChannelCreationForm()
+            'form': ChannelCreationForm(),
         }
         return render(request, template_name, context)
     elif request.method == 'POST':
@@ -37,12 +37,11 @@ def channel_create(request: HttpRequest):
             new_channel.save()
             new_channel.members.add(user)
             return redirect('home')
-        
+
         context = {
-            'form': form
+            'form': form,
         }
         return render(request, template_name, context)
-
 
 
 @login_required()
@@ -54,8 +53,8 @@ def channel(request, **kwargs):
         'context': {
             'channel': Channel.objects.get(pk=pk),
             'user_channels': user.channel_set.all(),
-            'messages_url': reverse('messages', kwargs={'pk': pk})
-        }
+            'messages_url': reverse('messages', kwargs={'pk': pk}),
+        },
     }
     return render(request, template_name, context)
 
@@ -69,7 +68,8 @@ def get_messages(request, **kwargs):
     channel_pk = kwargs.get('pk')
 
     channel_service = ChannelMessagesPageService(request.user, channel_pk, page, per_page)
-    obj = dict(messages=channel_service.get_messages(), page=channel_service.get_page(), next_page=channel_service.get_next_page())
+    obj = dict(messages=channel_service.get_messages(),
+               page=channel_service.get_page(), next_page=channel_service.get_next_page())
     serializer = MessagePageSerializer(obj)
     return JsonResponse(serializer.data, safe=False)
 
@@ -105,4 +105,3 @@ def room(request, room_name):
         })
         return context
 """
-

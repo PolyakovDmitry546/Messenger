@@ -1,7 +1,7 @@
-import json
 import datetime
-from typing import List
+import json
 from dataclasses import dataclass
+from typing import List
 
 
 class MessageJSONEncoder(json.JSONEncoder):
@@ -21,7 +21,7 @@ class Message:
 
     def to_json(self):
         return json.dumps(self.__dict__, cls=MessageJSONEncoder)
-    
+
 
 @dataclass
 class MessageList:

@@ -1,5 +1,5 @@
-from django.db import models
 from django.contrib.auth.models import User
+from django.db import models
 from django.urls import reverse
 
 
@@ -13,7 +13,7 @@ class Channel(models.Model):
 
     def __str__(self) -> str:
         return self.name
-    
+
     def get_absolute_url(self):
         return reverse('channel', kwargs={'pk': self.pk})
 
@@ -25,7 +25,7 @@ class Membership(models.Model):
 
     def __str__(self) -> str:
         return f"{self.user} -> {self.channel}"
-    
+
     def read_message_count(self):
         return self.channel.messages.filter(pk__lte=self.last_read_message_pk).count()
 
