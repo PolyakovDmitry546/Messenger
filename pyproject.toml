@@ -12,6 +12,7 @@ channels = {extras = ["daphne"], version = "^4.0.0"}
 pillow = "^9.5.0"
 channels-redis = "^4.1.0"
 djangorestframework = "^3.14.0"
+psycopg2 = "^2.9.7"
 
 
 [build-system]
