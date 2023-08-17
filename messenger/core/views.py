@@ -1,12 +1,12 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
+from django.http import HttpRequest, JsonResponse
 from django.urls import reverse
 
 from .models import Channel
 from .services import ChannelMessagesPageService
 from .serializers import MessagePageSerializer
-from . import DTO
+from .forms import ChannelCreationForm
 
 
 @login_required()
@@ -17,6 +17,32 @@ def home(request):
         'user_channels': user.channel_set.all()
     }}
     return render(request, template_name, context)
+
+
+@login_required()
+def channel_create(request: HttpRequest):
+    template_name = 'channel_create.html'
+
+    if request.method == 'GET':    
+        context = {
+            'form': ChannelCreationForm()
+        }
+        return render(request, template_name, context)
+    elif request.method == 'POST':
+        form = ChannelCreationForm(request.POST, request.FILES)
+        if form.is_valid():
+            new_channel: Channel = form.save(commit=False)
+            user = request.user
+            new_channel.author = user
+            new_channel.save()
+            new_channel.members.add(user)
+            return redirect('home')
+        
+        context = {
+            'form': form
+        }
+        return render(request, template_name, context)
+
 
 
 @login_required()

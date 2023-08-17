@@ -7,4 +7,6 @@
     <p>No channels yet.</p>
 {% endfor %}
 <hr>
-<button>Create new channel</button>
+<form action="{% url 'channel_create' %}" method="get">
+    <button>Create new channel</button>
+</form>
