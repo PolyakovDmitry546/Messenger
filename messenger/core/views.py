@@ -74,14 +74,6 @@ def get_messages(request, **kwargs):
     return JsonResponse(serializer.data, safe=False)
 
 
-def index(request):
-    return render(request, 'chat/index.html')
-
-
-def room(request, room_name):
-    return render(request, 'chat/room.html', {'room_name': room_name})
-
-
 """class UserChannelsView(LoginRequiredMixin, ListView):
     model = Channel
     template_name = 'channel/channels_panel.html'
