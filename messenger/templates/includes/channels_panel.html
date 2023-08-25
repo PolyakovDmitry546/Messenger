@@ -2,7 +2,10 @@
 <input title="Search">
 <hr>
 {% for channel in context.user_channels %}
-    <a href="{{ channel.get_absolute_url }}">{{ channel.name }}</a><br>
+    <div style="margin-bottom: 5px;">
+        <img src="{{ channel.icon.url }}" style="width: 50px; height: 50px;"/>
+        <a href="{{ channel.get_absolute_url }}">{{ channel.name }}</a><br>
+    </div>
 {% empty %}
     <p>No channels yet.</p>
 {% endfor %}
