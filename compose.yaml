@@ -1,0 +1,69 @@
+x-services:
+  app: &app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      DEBUG_MOD: false
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: messenger
+      DB_USER: pguser
+      DB_PASSWORD: pgpassword
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      SECRET_KEY: bk)_bi9^(7o-kbi3@a91av3eufqsr4$4g4u-(7^hhl02xczf7w
+
+services:
+  db:
+    image: postgres:15.4
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: messenger
+      POSTGRES_USER: pguser
+      POSTGRES_PASSWORD: pgpassword
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pguser -d messenger"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  redis:
+    image: redis:7.2.0-alpine3.18
+
+  job-migrate:
+    <<: *app
+    command: python messenger/manage.py migrate
+    depends_on:
+      - db
+
+  web-app:
+    <<: *app
+    command: python messenger/manage.py runserver 0.0.0.0:8000
+    volumes:
+      - media:/app/messenger/media
+      - static:/app/messenger/static
+    ports:
+      - 8001:8000
+    depends_on:
+      - db
+      - redis
+      - job-migrate
+
+  nginx:
+    image: nginx:mainline-alpine3.18-slim
+    ports:
+      - 8000:80
+    volumes:
+      - "./nginx.conf:/etc/nginx/conf.d/default.conf"
+      - static:/app/messenger/static
+      - media:/app/messenger/media
+
+volumes:
+  postgres-data:
+  media:
+  static:
