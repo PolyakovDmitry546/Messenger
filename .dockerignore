@@ -1,0 +1,12 @@
+/messenger/db.sqlite3
+/messenger/media
+
+**/__pycache__/
+
+# Unit test / coverage reports
+/messenger/htmlcov/
+/messenger/.tox/
+/messenger/.coverage
+/messenger/.cache
+/messenger/nosetests.xml
+/messenger/coverage.xml
