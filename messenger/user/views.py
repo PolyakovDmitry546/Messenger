@@ -1,6 +1,6 @@
+from django.contrib.auth import authenticate, login
 from django.shortcuts import redirect, render
 from django.views import View
-from django.contrib.auth import authenticate, login
 
 from .forms import UserCreationForm
 
@@ -10,11 +10,10 @@ class RegisterView(View):
 
     def get(self, request):
         context = {
-            'form': UserCreationForm()
+            'form': UserCreationForm(),
         }
 
         return render(request, self.template_name, context)
-
 
     def post(self, request):
         form = UserCreationForm(request.POST)
@@ -27,6 +26,6 @@ class RegisterView(View):
             login(request, user)
             return redirect('home')
         context = {
-            'form': form
+            'form': form,
         }
         return render(request, self.template_name, context)
