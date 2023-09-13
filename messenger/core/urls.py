@@ -8,4 +8,5 @@ urlpatterns = [
     path('channel/create', views.channel_create, name='channel_create'),
     path('channels/<int:pk>', views.channel, name='channel'),
     path('channels/<int:pk>/messages', views.get_messages, name='messages'),
+    path('api/v1/search', views.SearchResultAPIView.as_view(), name='search'),
 ]

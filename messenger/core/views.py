@@ -1,11 +1,15 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.http import HttpRequest, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 
+from rest_framework import permissions
+from rest_framework.views import APIView, Response
+
 from .forms import ChannelCreationForm
 from .models import Channel
-from .serializers import MessagePageSerializer
+from .serializers import MessagePageSerializer, SearchResultSerializer
 from .services import ChannelMessagesPageService
 
 
@@ -72,6 +76,19 @@ def get_messages(request, **kwargs):
                page=channel_service.get_page(), next_page=channel_service.get_next_page())
     serializer = MessagePageSerializer(obj)
     return JsonResponse(serializer.data, safe=False)
+
+
+class SearchResultAPIView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        q = request.GET.get('q', default=None)
+        if q is None or q == '':
+            return Response({'users': [], 'channels': []})
+        users = User.objects.filter(username__icontains=q)
+        channels = Channel.objects.filter(name__icontains=q)
+        serializer = SearchResultSerializer(dict(users=users, channels=channels))
+        return Response(serializer.data)
 
 
 """class UserChannelsView(LoginRequiredMixin, ListView):
