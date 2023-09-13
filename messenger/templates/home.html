@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
 <div>
@@ -11,11 +12,22 @@
             <a href="{% url 'login' %}">Login</a> |
             <a href="{% url 'register' %}">Register</a>
         {% endif %}
-        {% include 'includes/channels_panel.html' %}
+        <div>
+            <input type="text" id="searchInput" data-url="{% url 'search' %}">
+            <div id="channelsPanelDiv">
+                {% include 'includes/channels_panel.html' %}
+            </div>
+            <div id="searchPanelDiv" hidden="hidden">
+                {% include 'includes/search_panel.html' %}
+            </div>
+        </div>
+        
     </div>
     <div style="float: left; width: 80%;">
         {% block channel_content %}
         {% endblock channel_content %}
     </div>
+
+    <script type="module" src="{% static 'js/search.js' %}"></script>
 </div>
 {% endblock content %}
