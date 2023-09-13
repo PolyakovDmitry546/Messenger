@@ -10,6 +10,8 @@
         </p>
     {% endif %}
 
+    <a href="{% url 'register' %}">Register</a>
+
     <form action="{% url 'login' %}" method="post">
         {{ form }}
         {% csrf_token %}
