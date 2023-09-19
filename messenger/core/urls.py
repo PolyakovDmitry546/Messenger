@@ -3,10 +3,9 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.home, name='home'),
-    # path('channels/', views.UserChannelsView.as_view(), name='user_channels'),
-    path('channel/create', views.channel_create, name='channel_create'),
-    path('channels/<int:pk>', views.channel, name='channel'),
-    path('channels/<int:pk>/messages', views.get_messages, name='messages'),
+    path('', views.HomeView.as_view(), name='home'),
+    path('channel/create', views.ChannelCreateView.as_view(), name='channel_create'),
+    path('channels/<int:pk>', views.ChannelView.as_view(), name='channel'),
+    path('api/v1/channels/<int:pk>/messages', views.ChannelMessagesAPIView.as_view(), name='messages'),
     path('api/v1/search', views.SearchResultAPIView.as_view(), name='search'),
 ]
