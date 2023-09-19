@@ -37,13 +37,13 @@ services:
 
   job-migrate:
     <<: *app
-    command: python messenger/manage.py migrate
+    command: python messenger/manage.py migrate --settings=messenger.settings_docker
     depends_on:
       - db
 
   web-app:
     <<: *app
-    command: python messenger/manage.py runserver 0.0.0.0:8000
+    command: python messenger/manage.py runserver --settings=messenger.settings_docker 0.0.0.0:8000
     volumes:
       - media:/app/messenger/media
       - static:/app/messenger/static
