@@ -17,6 +17,9 @@ class Channel(models.Model):
     def get_absolute_url(self):
         return reverse('channel', kwargs={'pk': self.pk})
 
+    def get_join_absolute_url(self):
+        return reverse('channel_join', kwargs={'pk': self.pk})
+
 
 class Membership(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

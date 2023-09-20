@@ -1,7 +1,9 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.http import HttpResponse
+from django.shortcuts import redirect, render
 from django.urls import reverse
+from django.views import View
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import FormView
 
@@ -55,6 +57,32 @@ class ChannelView(LoginRequiredMixin, TemplateView):
             },
         }
         return context
+
+
+class ChannelJoinView(LoginRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        template_name = 'channel_join.html'
+        pk = kwargs.get('pk')
+        user = request.user
+        channel = Channel.objects.get(pk=pk)
+
+        if channel.members.contains(user):
+            return redirect('channel', pk=pk)
+
+        context = {
+            'context': {
+                'channel': channel,
+                'user_channels': user.channel_set.all(),
+            },
+        }
+        return render(request, template_name, context)
+
+    def post(self, request, *args, **kwargs):
+        pk = kwargs.get('pk')
+        user = request.user
+        channel = Channel.objects.get(pk=pk)
+        channel.members.add(user)
+        return redirect('channel', pk=pk)
 
 
 class ChannelMessagesAPIView(APIView):

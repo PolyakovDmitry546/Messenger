@@ -1,0 +1,19 @@
+{% extends 'home.html' %}
+
+{% block channel_content %}
+    <div  style="display: flex; flex-direction: column; align-items: center;">
+        <div style="background-image: url('{{ context.channel.icon.url }}');
+                    background-size: 300px; height: 300px; width: 300px;">
+        </div>
+        <div style="width: 400px; display: flex; flex-direction: column; align-items: center;">
+            <h1>{{ context.channel.name }}</h1>
+            <h6>Description</h6>
+            <p>{{ context.channel.description }}</p>
+            <p>count subscribers</p>
+            <form action="{% url 'channel_join' pk=context.channel.pk %}" method="post">
+                {% csrf_token %}
+                <input id="channel-join-submit" type="submit" value="Join">
+            </form >
+        </div>
+    </div>
+{% endblock channel_content %}

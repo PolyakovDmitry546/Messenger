@@ -32,7 +32,7 @@ class SearchResultUserSerializer(serializers.ModelSerializer):
 
 
 class SearchResultChannelSerializer(serializers.ModelSerializer):
-    url = serializers.CharField(source='get_absolute_url', read_only=True)
+    url = serializers.CharField(source='get_join_absolute_url', read_only=True)
 
     class Meta:
         model = Channel
