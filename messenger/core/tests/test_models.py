@@ -46,6 +46,10 @@ class ChannelTest(TestCase):
         expected_url = '/channels/' + str(self.channel.pk)
         self.assertEqual(self.channel.get_absolute_url(), expected_url)
 
+    def test_get_join_absolute_url(self):
+        expected_url = '/channels/' + str(self.channel.pk) + '/join'
+        self.assertEqual(self.channel.get_join_absolute_url(), expected_url)
+
 
 class MembershipTest(TestCase):
     @classmethod
