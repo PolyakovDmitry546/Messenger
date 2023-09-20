@@ -59,7 +59,6 @@ const throttle = (callback, time) => {
 
 const handleSearchOnkeyup = () => {
     throttle(async () => {
-        console.log("trot");
         var value = searchInput.value;
         const responseData = await getSerchResult(value);
         CleanPreviosSearchResult();
