@@ -2,17 +2,16 @@
 {% load static %}
 
 {% block channel_content %}
-    {{ context.channel.pk|json_script:"roomName" }}
+    {{ context.dialog.pk|json_script:"roomName" }}
     {{ user.pk|json_script:"userId" }}
     {{ context.messages_url|json_script:"messagesURL"}}
-    <div hidden id="chatType">channel</div>
+    <div hidden id="chatType">dialog</div>
     <div style="margin-top: 5px;">
         <div style="display: inline-block;">
-            <img src="{{ context.channel.icon.url }}" style="width: 50px; height: 50px;"/>
+            <img src="" style="width: 50px; height: 50px;"/>
         </div>
         <div style="display: inline-block; height: 50px; vertical-align: middle;">
-            <a href="">{{ context.channel.name }}</a>
-            <div>count subscribers</div>
+            <a href="">{{ context.target_user }}</a>
         </div>
     </div>
     <hr>

@@ -3,6 +3,7 @@ import {getMessageNode} from './components/message.js';
 const chatLog = document.getElementById('chatLog');
 const roomName = JSON.parse(document.getElementById('roomName').textContent);
 const userId = JSON.parse(document.getElementById('userId').textContent);
+const chatType = document.getElementById('chatType').textContent;
 var nextTopPageNumber;
 var nextBottomPageNumber = 0;
 var currentBottomPageNumber = 0;
@@ -11,7 +12,9 @@ var currentBottomPageNumber = 0;
 const chatSocket = new WebSocket(
     'ws://'
     + window.location.host
-    + '/ws/chat/'
+    + '/ws/'
+    + chatType
+    + '/'
     + roomName
     + '/'
 );
